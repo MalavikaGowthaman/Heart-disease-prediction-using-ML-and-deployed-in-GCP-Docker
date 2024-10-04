@@ -126,6 +126,3 @@
     gcloud app browse
     ```
 
----
-
-This guide outlines the entire process, from developing a machine learning model locally to deploying it in a Docker container on Google Cloud Run. The deployment of the model makes it accessible as a web application, allowing users to predict heart disease based on patient data.
