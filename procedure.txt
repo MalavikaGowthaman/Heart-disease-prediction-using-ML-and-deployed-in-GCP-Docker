@@ -1,0 +1,74 @@
+Note: before this procedure , your flask ml project should work locally. make sure you have requirements.txt which has supporting library.
+
+Step1: Create Google Account
+Step2: Go to Google Console
+Step3: Activate the free Credits
+Step4: Go to IAM from left side three stacked horizontal line 
+Step5: In the left side option "Managed Resource"
+Step6: Click "Create Project"
+Step7: In Project Id: "give proper project name in lower case"
+Step8: Download Google Cloud SDK using below link 
+
+https://dl.google.com/dl/cloudsdk/channels/rapid/GoogleCloudSDKinstaller.exe
+
+Stpe9: Install the downloaded .exe file.
+
+Step10: Download Docker SDK
+
+from below link you can download the docker for windows
+
+https://docs.docker.com/desktop/install/windows-install/
+
+Step11: Install the downloaded file 
+
+Step12: After installation, open --> Command Prompt
+
+Step13:Navigate to the working Directory
+
+Step14: issue this command "docker --version" --> if it is installed properly, it gives the docker version.
+
+Step15: open the working folder in the windows and right click-->New--> Text Document
+
+Step16: paste this code
+
+# Use an official Python runtime as the base image
+FROM python:3.11-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Install required Python packages from the requirements file
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Expose the port that the Flask app will run on
+EXPOSE 8080
+
+# Set the default command to run the Flask app (point to main.py)
+#CMD ["python", "main.py"]
+#CMD exec gunicorn --bind :$PORT --worker 1 --theards 8 --timeout 0 app:main
+CMD ["gunicorn", "--bind", ":8080", "--workers", "1", "--threads", "8", "--timeout", "0", "main:app"]
+
+Step17:Go to command prompt and Make you are in the working directory 
+
+issue this command "ren Dockerfile.txt Dockerfile" --> this removes the .txt file extension.
+
+step18: gcloud auth login
+
+it opens the browser and ask for the login(please verify the correct account where you have create the google console )
+ 
+step19:gcloud config set project YOUR_PROJECT_ID --> gcloud config set project heartdockergcp
+
+step20:gcloud services enable cloudbuild.googleapis.com
+
+step21:gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/your_ml_app . --> gcloud builds submit --tag gcr.io/heartdockergcp/heartdockerimagegcp .
+step22:gcloud container images list
+step23:gcloud run deploy --image gcr.io/YOUR_PROJECT_ID/your_ml_app --platform managed
+
+
+gcloud run deploy --image gcr.io/heartdockergcp/heartdockerimagegcp --platform managed
+
+
+
